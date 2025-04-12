@@ -11,7 +11,6 @@
       })
       str.value = "";
     }
-
   }
 
   function del(index){
@@ -34,7 +33,6 @@
       text: '打豆豆'
     }
   ]);
-
 
 </script>
 
