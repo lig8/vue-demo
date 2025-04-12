@@ -2,14 +2,20 @@
   import {ref} from "vue";
 
   function add() {
-    list.value.push({
-      isCompleted: false,
-      text: str.value
-    })
+    if (str.value == ''){
+      return;
+    }else{
+      list.value.push({
+        isCompleted: false,
+        text: str.value
+      })
+      str.value = "";
+    }
+
   }
 
   function del(index){
-
+    list.value.splice(index, 1);
   }
 
   const str = ref('');
@@ -45,12 +51,12 @@
     </div>
 
 <!--  items  -->
-    <div v-for='item in list' :class="[item.isCompleted ? 'item completed' : 'item']">
+    <div v-for='(item,index) in list' :class="[item.isCompleted ? 'item completed' : 'item']">
       <div>
         <input v-model="item.isCompleted" type="checkbox" />
         <span class="name"> {{ item.text}} </span>
       </div>
-      <div class="del"> del </div>
+      <div @click="del(index)" class="del"> del </div>
     </div>
 
   </div>
@@ -63,6 +69,7 @@
 }
 .del{
   color: red;
+  cursor: pointer;
 }
 
 .item {
