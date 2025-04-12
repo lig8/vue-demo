@@ -1,49 +1,47 @@
 <script setup>
-  import {ref, watch } from "vue";
+import {ref, watch } from "vue";
 
-  function add(newVal, oldVal) {
-    console.log('newVal: '+ newVal.text, 'oldVal: '+ oldVal.text);
+function add(newVal, oldVal) {
+  console.log('newVal: '+ newVal, 'oldVal: '+ oldVal);
+}
+
+function del(index){
+  list.value.splice(index, 1);
+}
+
+const str = ref('');
+
+const list = ref([
+  {
+    isCompleted: true,
+    text: '吃饭'
+  },
+  {
+    isCompleted: false,
+    text: '睡觉'
+  },
+  {
+    isCompleted: false,
+    text: '打豆豆'
   }
+]);
 
-  function del(index){
-    list.value.splice(index, 1);
-  }
-
-  const str = ref({
-    text: ''
-  });
-
-  const list = ref([
-    {
-      isCompleted: true,
-      text: '吃饭'
-    },
-    {
-      isCompleted: false,
-      text: '睡觉'
-    },
-    {
-      isCompleted: false,
-      text: '打豆豆'
-    }
-  ]);
-
-  watch(str,add,{deep: true});
+watch(str,add);
 </script>
 
 <template>
   <div class="todo-App">
 
-<!--  title  -->
+    <!--  title  -->
     <div class = "title"> XXX的todo-App </div>
 
-<!--  add todo  -->
+    <!--  add todo  -->
     <div class="todo-form">
-      <input v-model="str.text" class="todo-input" type="text" placeholder="add a todo">
+      <input v-model="str" class="todo-input" type="text" placeholder="add a todo">
       <div @click="add" class="todo-button">add todo</div>
     </div>
 
-<!--  items  -->
+    <!--  items  -->
     <div v-for='(item,index) in list' :class="[item.isCompleted ? 'item completed' : 'item']">
       <div>
         <input v-model="item.isCompleted" type="checkbox" />
