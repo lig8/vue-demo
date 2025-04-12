@@ -1,16 +1,8 @@
 <script setup>
-  import {ref} from "vue";
+  import {ref, watch } from "vue";
 
-  function add() {
-    if (str.value == ''){
-      return;
-    }else{
-      list.value.push({
-        isCompleted: false,
-        text: str.value
-      })
-      str.value = "";
-    }
+  function add(newVal, oldVal) {
+    console.log('newVal: '+ newVal, 'oldVal: '+ oldVal);
   }
 
   function del(index){
@@ -34,6 +26,7 @@
     }
   ]);
 
+  watch(str,add);
 </script>
 
 <template>
