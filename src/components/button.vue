@@ -1,10 +1,24 @@
 <script setup>
-  import { defineProps, defineEmits } from 'vue'
-  const props = defineProps(['text'])
-  const emit = defineEmits(['msg'])
+  // import { defineProps, defineEmits } from 'vue'
+  import {ref} from "vue";
 
-  function send(text) {
-    emit('msg',"hello world")
+  const props = defineProps(['text'])
+  const emit = defineEmits(['change'])
+  const arr = ref([
+    'China',
+    'Japan',
+    'Usa',
+    'France',
+    'England',
+    'Brazil',
+    'Korea',
+    'Mexico',
+    'Vietnam',
+    'Pakistan'
+  ]);
+
+  function send() {
+    emit('change',arr.value[Math.floor(Math.random() * 10)]);
   }
 </script>
 
