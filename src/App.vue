@@ -2,14 +2,16 @@
   import {ref, watch } from "vue";
 
   function add(newVal, oldVal) {
-    console.log('newVal: '+ newVal, 'oldVal: '+ oldVal);
+    console.log('newVal: '+ newVal.text, 'oldVal: '+ oldVal.text);
   }
 
   function del(index){
     list.value.splice(index, 1);
   }
 
-  const str = ref('');
+  const str = ref({
+    text: ''
+  });
 
   const list = ref([
     {
@@ -26,7 +28,7 @@
     }
   ]);
 
-  watch(str,add);
+  watch(str,add,{deep: true});
 </script>
 
 <template>
@@ -37,7 +39,7 @@
 
 <!--  add todo  -->
     <div class="todo-form">
-      <input v-model="str" class="todo-input" type="text" placeholder="add a todo">
+      <input v-model="str.text" class="todo-input" type="text" placeholder="add a todo">
       <div @click="add" class="todo-button">add todo</div>
     </div>
 
