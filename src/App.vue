@@ -1,38 +1,51 @@
 <script setup>
   import {ref} from "vue";
-
-  function add() {
-    if (str.value == ''){
-      return;
-    }else{
-      list.value.push({
-        isCompleted: false,
-        text: str.value
-      })
-      str.value = "";
-    }
-  }
-
-  function del(index){
-    list.value.splice(index, 1);
-  }
+  import axios from "axios"
 
   const str = ref('');
+  const list = ref([]);
 
-  const list = ref([
-    {
-      isCompleted: true,
-      text: '吃饭'
-    },
-    {
-      isCompleted: false,
-      text: '睡觉'
-    },
-    {
-      isCompleted: false,
-      text: '打豆豆'
-    }
-  ]);
+ async function getList(){
+    const res = await axios({
+      url:"https://acx740jken.gzg.sealos.run/get_list",
+      method: "GET"
+    });
+    list.value = res.data.list;
+   // console.log(list);
+ }
+
+  async function addTodo(){
+    const res = await axios({
+      url:"https://acx740jken.gzg.sealos.run/add_todo",
+      method: "POST",
+      data:{
+        value: str.value,
+        isCompleted: false
+      }
+    });
+    str.value = "";
+    getList();
+  }
+
+  async function updateTodo(id){
+    const res = await axios({
+      url:"https://acx740jken.gzg.sealos.run/update_todo",
+      method: "PUT",
+      data:{id}
+    });
+    getList();
+  }
+
+  async function deleteTodo(id){
+    const res = await axios({
+      url:"https://acx740jken.gzg.sealos.run/delete_todo",
+      method: "delete",
+      data:{ id }
+    });
+    getList();
+  }
+
+  getList();
 
 </script>
 
@@ -45,22 +58,26 @@
 <!--  add todo  -->
     <div class="todo-form">
       <input v-model="str" class="todo-input" type="text" placeholder="add a todo">
-      <div @click="add" class="todo-button">add todo</div>
+      <div @click="addTodo" class="todo-button">add todo</div>
     </div>
 
 <!--  items  -->
-    <div v-for='(item,index) in list' :class="[item.isCompleted ? 'item completed' : 'item']">
+    <div v-for='(item) in list' :class="[item.isCompleted ? 'item completed' : 'item']">
       <div>
-        <input v-model="item.isCompleted" type="checkbox" />
-        <span class="name"> {{ item.text}} </span>
+        <input v-model="item.isCompleted" @click="updateTodo(item._id)" type="checkbox" />
+        <span class="name"> {{ item.value}} </span>
       </div>
-      <div @click="del(index)" class="del"> del </div>
+      <div @click="deleteTodo(item._id)" class="del"> del </div>
     </div>
 
   </div>
 </template>
 
 <style>
+
+.name{
+  margin-left: 10px;
+}
 .completed {
   text-decoration: line-through;
   opacity: 0.4;
@@ -80,11 +97,11 @@
   margin: 8px auto;
   padding: 16px;
   border-radius: 20px;
-  box-shadow:  rgba(149, 157, 165, 0.2) 0px 8px 20px;
+  box-shadow:  rgba(149, 157, 165, 0.2) 0 8px 20px;
 }
 .todo-form{
   display: flex;
-  marging-top: 20px;
+  margin-top: 20px;
   margin-left: 30px;
 }
 
